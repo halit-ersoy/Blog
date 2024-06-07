@@ -172,7 +172,7 @@ section .title::after{
 /* home section styling */
 .home{
     display: flex;
-    background: url("images/profile1.png") no-repeat center;
+    background: url("images/halit.png") no-repeat center;
     height: 100vh;
     color: #fff;
     min-height: 500px;
