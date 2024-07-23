@@ -69,4 +69,11 @@ $(document).ready(function(){
             }
         }
     });
+    $('#hire-me').click(function(event){
+        event.preventDefault();
+        var email = "halit.ersy@gmail.com";
+        var subject = "";
+        var body = "";
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
 });
