@@ -1,0 +1,809 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Deney Tasarımı Çalışma Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#f5f7f6; --card:#ffffff; --ink:#18242f; --muted:#5a6873; --line:#d7dfe0;
+  --accent:#0d6f68; --accent-soft:#e1f0ee; --warn:#a4561a; --warn-soft:#f8ebdf;
+  --good:#2f7a3b; --good-soft:#e3f1e5; --bad:#a3322c; --bad-soft:#f7e3e1;
+  --grid:rgba(13,111,104,.06);
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Source Sans 3",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#10171c; --card:#172128; --ink:#e4ecee; --muted:#9aabb3; --line:#2a3842;
+    --accent:#4fc2b6; --accent-soft:#16312f; --warn:#e7a066; --warn-soft:#3a2716;
+    --good:#7ccc88; --good-soft:#1a3120; --bad:#ef8a82; --bad-soft:#3a1d1b;
+    --grid:rgba(79,194,182,.05);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#10171c; --card:#172128; --ink:#e4ecee; --muted:#9aabb3; --line:#2a3842;
+  --accent:#4fc2b6; --accent-soft:#16312f; --warn:#e7a066; --warn-soft:#3a2716;
+  --good:#7ccc88; --good-soft:#1a3120; --bad:#ef8a82; --bad-soft:#3a1d1b;
+  --grid:rgba(79,194,182,.05);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:28px 64px}
+header.top{display:grid;gap:6px;padding-block:8px 20px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0;max-width:65ch}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;gap:6px;flex-wrap:wrap;padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:24px}
+nav.tabs button{font:600 15px var(--body);border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+nav.tabs button:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.panel{display:grid;gap:22px}
+h2{font-family:var(--display);font-weight:800;font-size:26px;margin:18px 0 0;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:19px;margin:0 0 6px;text-wrap:balance}
+p{margin:0 0 10px;max-width:70ch}
+ul,ol{margin:0 0 10px;padding-left:22px}
+li{margin:3px 0}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.03em}
+.block{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+dl.terms{display:grid;grid-template-columns:minmax(140px,max-content) 1fr;gap:8px 18px;margin:0}
+dl.terms dt{font-weight:700}
+dl.terms dd{margin:0}
+@media (max-width:560px){dl.terms{grid-template-columns:1fr}dl.terms dd{margin-bottom:6px}}
+.en{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-weight:400}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:10px 14px;border-radius:0 8px 8px 0;font-size:15.5px}
+.note b{color:var(--warn)}
+.key{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 8px 8px 0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15.5px;font-variant-numeric:tabular-nums}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+code,.mono{font-family:var(--mono);font-size:.88em}
+.path{font-family:var(--mono);font-size:13px;background:var(--accent-soft);color:var(--ink);padding:2px 6px;border-radius:4px;white-space:normal}
+.formula{font-family:var(--mono);font-size:15px;background:var(--paper);border:1px dashed var(--line);border-radius:6px;padding:8px 12px;margin:6px 0 10px;overflow-x:auto}
+.pill{display:inline-block;font:600 12px var(--mono);padding:2px 8px;border-radius:999px}
+.pill.g{background:var(--good-soft);color:var(--good)}
+.pill.r{background:var(--bad-soft);color:var(--bad)}
+/* decision tree */
+.tree{display:grid;gap:14px}
+.q{font-weight:700}
+.branch{display:grid;gap:8px;margin-left:10px;padding-left:16px;border-left:2px solid var(--line)}
+.leaf{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.leaf .cond{color:var(--muted);font-size:15px}
+.test{font-weight:700;color:var(--accent)}
+.post{font-size:14px;color:var(--muted)}
+/* quiz */
+.score{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.qcard .qn{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.05em}
+.qcard .qt{font-weight:600;margin:4px 0 10px}
+.opts{display:grid;gap:6px}
+.opts button{text-align:left;font:16px var(--body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--accent)}
+.opts button:disabled{cursor:default}
+.opts button.right{background:var(--good-soft);border-color:var(--good)}
+.opts button.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.expl{margin-top:10px;font-size:15.5px;border-top:1px solid var(--line);padding-top:10px}
+details.work{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+details.work summary{cursor:pointer;font-weight:700;color:var(--accent)}
+details.work[open] summary{margin-bottom:10px}
+.btn{font:600 14px var(--body);border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+@media (prefers-reduced-motion:no-preference){.opts button{transition:background .15s,border-color .15s}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">İstatistiksel Deney Tasarımı · Hafta 1–4</div>
+    <h1>Deney Tasarımı ve Temel İstatistik Çalışma Rehberi</h1>
+    <p class="lead">Şenoğlu &amp; Acıtaş giriş bölümü, Dr. Sedat Şen'in 1., 2. ve 3. sunumları (SPSS, t-testi, ANOVA), istatistiksel test akış şeması ve üç uygulama veri setinden derlenen notlar, çözümler ve pratik sorular.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-notlar" aria-selected="true" data-t="notlar">Ders Notları</button>
+    <button role="tab" id="tab-kopya" aria-selected="false" data-t="kopya">Kopya Kağıdı</button>
+    <button role="tab" id="tab-veri" aria-selected="false" data-t="veri">Veri Seti Çözümleri</button>
+    <button role="tab" id="tab-sorular" aria-selected="false" data-t="sorular">Pratik Sorular</button>
+  </nav>
+
+  <!-- ================= NOTLAR ================= -->
+  <section class="panel" id="notlar" role="tabpanel">
+
+    <h2>1. Deney tasarımının temel kavramları</h2>
+    <div class="block">
+      <div class="src">Kaynak: Şenoğlu &amp; Acıtaş, İstatistiksel Deney Tasarımı, Bölüm 1</div>
+      <dl class="terms">
+        <dt>Deney <span class="en">experiment</span></dt>
+        <dd>Kontrol altındaki koşulların, deney birimlerinin bilinmeyen karakteristik özellikleri üzerindeki etkisini test etmek için uygulanan işlem/süreç.</dd>
+        <dt>Deney tasarımı <span class="en">experimental design</span></dt>
+        <dd>Deney birimlerinin maruz kalacağı kontrollü koşulların belli ilke ve kurallarla düzenlenmesi (Lee, 1975).</dd>
+        <dt>Faktör <span class="en">factor</span></dt>
+        <dd>Deneyde etkisi incelenen durum/koşul. İki veya daha fazla düzeyi olur. Faktör nitel (cinsiyet) ya da nicel (sıcaklık) olabilir.</dd>
+        <dt>Deneme <span class="en">treatment</span></dt>
+        <dd>Faktörün düzeyleri. Örn. sıcaklık faktörünün 10 °C, 20 °C, 30 °C düzeyleri = 3 deneme. Bu örnekte düzey sayısı deneyi yapanın <b>kontrolündedir</b>; cinsiyet örneğinde (kadın/erkek) <b>kontrolünde değildir</b>.</dd>
+        <dt>Deney birimi <span class="en">experimental unit</span></dt>
+        <dd>Denemelerin rasgele atandığı/uygulandığı varlıklar.</dd>
+        <dt>Gözlem birimi <span class="en">observational unit</span></dt>
+        <dd>Üzerinde ölçüm yapılan varlıklar. Deney birimiyle aynı da olabilir, farklı da.</dd>
+        <dt>Bağımlı değişken <span class="en">response</span></dt>
+        <dd>Deney birimlerinin hakkında bilgi istenen karakteristik özelliği (yanıt). Nitel ya da nicel olabilir.</dd>
+        <dt>Bağımsız değişken</dt>
+        <dd>Bağımlı değişkeni etkileyen, kontrol edilebilir deneysel değişken = faktör (Hicks &amp; Turner, 1999).</dd>
+        <dt>Deneysel hata <span class="en">experimental error</span></dt>
+        <dd>Aynı koşulda aynı denemeye maruz kalan deney birimleri arasındaki kontrol edilemeyen farklılıklar.</dd>
+        <dt>ANOVA</dt>
+        <dd>R. A. Fisher'ın geliştirdiği Varyans Analizi; faktörlerin istatistiksel olarak anlamlı olup olmadığını belirler.</dd>
+      </dl>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>Bloklama <span class="en">blocking</span></h3>
+        <p>Aralarında sistematik fark olan deney birimleri, <b>kendi içinde homojen, kendi aralarında heterojen</b> gruplara (blok) ayrılır. Amaç: deneyin hassaslığını artırmak, <b>deneysel hatayı azaltmak</b>.</p>
+      </div>
+      <div class="block">
+        <h3>Rasgeleleştirme <span class="en">randomization</span></h3>
+        <p>Denemeler birimlere rasgele atanır; her birimin her denemeye atanma olasılığı eşittir. Yapılmazsa deneme etkileri farkı ve hata varyansı tahminleri <b>yanlı</b> olur.</p>
+      </div>
+      <div class="block">
+        <h3>Tekrar <span class="en">replication</span></h3>
+        <p>Bir denemenin uygulandığı deney birimi sayısı. Eşitse <b>dengeli</b>, en az bir denemede farklıysa <b>dengesiz</b> tasarım. Tekrar sayısı <b>&gt; 1</b> olmalı, yoksa deneysel hata hesaplanamaz. Tekrar arttıkça hata küçülür, testlerin hassasiyeti artar (ama maliyet/bütçe sınırı var).</p>
+      </div>
+    </div>
+    <div class="key"><b>Deneyin aşamaları:</b> (i) Planlama ve tasarım → (ii) Deneyin yapılması ve verinin elde edilmesi → (iii) Veri analizi ve sonuçların yorumlanması.</div>
+
+    <h2>2. İstatistiğin temel kavramları</h2>
+    <div class="block">
+      <div class="src">Kaynak: Dr. Sedat Şen, 1. Sunum</div>
+      <dl class="terms">
+        <dt>İstatistik</dt><dd>Sayısal verilerin toplanması, analizi ve yorumlanmasını içeren matematik kolu.</dd>
+        <dt>Ham veri</dt><dd>Hiç işlem yapılmamış ölçümler (ham puanlar). Her bir ölçüm = <b>değer</b>.</dd>
+        <dt>Frekans</dt><dd>Bir değerin tekrar sayısı (kaç öğrenci o puanı aldı).</dd>
+        <dt>Evren <span class="en">population</span></dt><dd>Sonuçların genellenmek istendiği elemanlar bütünü. <b>Hedef evren</b> (genel) ve <b>ulaşılabilir evren</b> (çalışma evreni) olarak ikiye ayrılır (Karasar, 2000).</dd>
+        <dt>Sayım <span class="en">census</span></dt><dd>Evrendeki tüm bireylere ulaşmak.</dd>
+        <dt>Örneklem <span class="en">sample</span></dt><dd>Evrenden belli kurallarla seçilmiş, evreni temsil ettiği varsayılan küçük küme. Evrene ulaşılamama nedenleri: <b>maliyet, kontrol güçlüğü, etik</b>.</dd>
+        <dt>Örnekleme</dt><dd>Evreni temsil edecek örneklemi seçme süreci.</dd>
+        <dt>İstatistik vs. parametre</dt><dd>Örneklemden hesaplanan değer = <b>istatistik</b> (Latin harfi: <i>s</i>, x̄). Evreni açıklayan değer = <b>parametre</b> (Yunan harfi: σ, μ). Parametre bilinmez, tahmin edilir.</dd>
+      </dl>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>Olasılığa dayalı (seçkisiz)</h3>
+        <ul><li>Basit seçkisiz</li><li>Tabakalı (oranlı / oransız)</li><li>Küme</li><li>Sistematik</li></ul>
+        <p style="font-size:15px">Şartlar: <b>seçkisizlik</b> (her elemanın eşit seçilme şansı) ve <b>bağımsızlık</b>. Genelleme gücü yüksektir.</p>
+      </div>
+      <div class="block">
+        <h3>Olasılığa dayalı olmayan</h3>
+        <ul><li>Uygun (kolayda)</li><li>Kartopu</li><li>Kota</li><li>Amaçlı</li><li>Boyutsal</li></ul>
+        <p style="font-size:15px">Birimlerin seçilme şansı eşit değildir, rastgele seçilmez.</p>
+      </div>
+    </div>
+    <div class="note"><b>Dikkat:</b> Sunumun bir slaytında sistematik örnekleme "seçkisiz olmayan" altında da geçiyor. Sonraki listede ise olasılığa dayalı yöntemler arasında. Sınavda yaygın kabul olan <b>olasılığa dayalı</b> sınıflamayı kullanmak daha güvenli; emin olmak için hocaya sorabilirsin.</div>
+
+    <h2>3. Değişkenler ve ölçekler</h2>
+    <div class="two">
+      <div class="block">
+        <h3>Değişken türleri</h3>
+        <ul>
+          <li><b>Değişken</b>: gözlemden gözleme farklı değer alan özellik. Değişmiyorsa <b>sabit</b>.</li>
+          <li><b>Nicel</b>: sayıyla ifade edilir, sayı azlık-çokluk gösterir (boy, kilo, yaş). Forma numarası nicel <b>değildir</b>.</li>
+          <li><b>Nitel</b>: sembolle ifade edilir (cinsiyet, göz rengi, medeni durum, başarı: iyi/orta).</li>
+          <li><b>Sürekli</b>: iki değer arasında daima başka değer vardır (1,5 kg; 1,6 kg).</li>
+          <li><b>Süreksiz (kesikli/kategorik)</b>: iki değer arasında hiç ya da birkaç değer var (cinsiyet, gözlük kullanımı).</li>
+          <li><b>Bağımsız</b>: başka değişkene bağlı olmadan değişir (ayak büyüklüğü). <b>Bağımlı</b>: başka değişkene bağlı (ayakkabı numarası). Neden-sonuç ilişkisine göre belirlenir.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Betimsel vs. çıkarımsal</h3>
+        <p><b>Betimsel</b>: veriyi özetler/betimler (ortalama, ss, frekans, grafik).</p>
+        <p><b>Çıkarımsal</b>: örneklemden evren hakkında çıkarım yapar, hipotez testine dayanır (parametrik / parametrik olmayan).</p>
+        <h3 style="margin-top:12px">Veri kaynakları ve gösterim</h3>
+        <p>Kaynak: yayınlanmış kaynaklar (PISA, OECD, WHO…), deneyler, anketler.</p>
+        <p>Nitel veri → tablo, bar, pasta grafiği. Nicel veri → histogram, kök-yaprak.</p>
+        <p>Sürekli değişken → ortalama, ss, varyans. Kesikli değişken → frekans ve yüzde.</p>
+      </div>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Özellik</th><th>Sınıflama <span class="en">nominal</span></th><th>Sıralama <span class="en">ordinal</span></th><th>Eşit aralıklı <span class="en">interval</span></th><th>Eşit oranlı <span class="en">ratio</span></th></tr></thead>
+        <tbody>
+          <tr><td>Eşit birim</td><td>Yok</td><td>Yok</td><td>Var</td><td>Var</td></tr>
+          <tr><td>Sıfır noktası</td><td>Yok</td><td>Yok</td><td>İtibari (keyfi)</td><td>Gerçek (mutlak)</td></tr>
+          <tr><td>İşlemler</td><td>Yok (sadece sayma)</td><td>Yok (sadece büyük/küçük)</td><td>+, −</td><td>+, −, ×, ÷ (log dönüşüm dahil)</td></tr>
+          <tr><td>Örnek</td><td>Cinsiyet, şube (4A/4B), evli-bekar</td><td>Sınav sıralaması, banka sıra no.</td><td>Sıcaklık (°C), takvim, saat, test puanı</td><td>Uzunluk, ağırlık, süre, basınç</td></tr>
+          <tr><td>Bilgi düzeyi</td><td colspan="4">En az bilgi (sınıflama) → en fazla bilgi (eşit oranlı)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="key">Anahtar ayrım: <b>40 °C, 20 °C'nin 2 katı sıcak değildir</b> (eşit aralıklı, sıfır itibari). <b>100 cm, 20 cm'nin 5 katıdır</b> (eşit oranlı, sıfır = özelliğin yokluğu).</div>
+
+    <h2>4. Betimsel istatistikler</h2>
+    <div class="two">
+      <div class="block">
+        <h3>Merkezi eğilim (yığılma)</h3>
+        <p>Aritmetik ortalama, medyan (ortanca), mod (tepe değeri), çeyrekler (Q1, Q2, Q3), ağırlıklı ortalama.</p>
+        <h3 style="margin-top:12px">Dağılım (yayılma)</h3>
+        <p>Ranj, çeyrekler arası açıklık, çeyrek kayma, varyans, standart sapma.</p>
+        <p class="src">SPSS: Analyze › Descriptive Statistics › Frequencies › Statistics</p>
+      </div>
+      <div class="block">
+        <h3>Standart puanlar</h3>
+        <div class="formula">Z = (X − X̄) / S&nbsp;&nbsp;&nbsp;→ ort. 0, ss 1<br>T = 50 + 10·Z&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ ort. 50, ss 10</div>
+        <p>|Z| &gt; 3 olan değerler <b>uç değer</b> sayılır.</p>
+        <div class="tbl"><table><tr><th>Z</th><td>−3</td><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>T</th><td>20</td><td>30</td><td>40</td><td>50</td><td>60</td><td>70</td><td>80</td></tr></table></div>
+      </div>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>Normal dağılım</h3>
+        <ul>
+          <li>Çan biçimli, simetrik; ortalama = medyan = mod.</li>
+          <li>X̄ ± 1SS → %68,26 · X̄ ± 2SS → %95,44 · X̄ ± 3SS → %99,74</li>
+          <li>X yerine Z kullanılırsa: <b>standart (birim) normal dağılım</b>.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Çarpıklık</h3>
+        <ul>
+          <li>Ortalama = Medyan = Mod → <b>simetrik</b></li>
+          <li>Ortalama &gt; Medyan &gt; Mod → <b>sağa (pozitif) çarpık</b>, kuyruk sağda</li>
+          <li>Ortalama &lt; Medyan &lt; Mod → <b>sola (negatif) çarpık</b>, kuyruk solda</li>
+        </ul>
+        <p style="font-size:15px">Ortalama uç değerlere en duyarlı ölçüdür, bu yüzden kuyruk tarafına çekilir.</p>
+      </div>
+    </div>
+
+    <h2>5. Normallik ve varsayımlar</h2>
+    <div class="block">
+      <div class="src">Kaynak: Dr. Sedat Şen, 2. Sunum</div>
+      <div class="tbl" style="margin-bottom:12px"><table>
+        <thead><tr><th>Yöntem</th><th>Nasıl</th><th>Normal kabul</th></tr></thead>
+        <tbody>
+          <tr><td>Görsel</td><td>Histogram, P-P plot, Q-Q plot</td><td>Çan eğrisi / noktalar doğru üzerinde</td></tr>
+          <tr><td>Sayısal</td><td>Çarpıklık ve basıklık</td><td>0'a yakın; ±2 (bazı kaynaklarda ±3) içinde</td></tr>
+          <tr><td>Sayısal (z)</td><td>z = çarpıklık / SE (basıklık için de)</td><td>|z| &lt; 1,96 (α = .05)</td></tr>
+          <tr><td>Test</td><td>Kolmogorov-Smirnov, Shapiro-Wilk</td><td><b>p &gt; .05</b> → normal</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>P-P vs. Q-Q:</b> P-P plot örneklemdeki değerlerin kendisini, Q-Q plot bu değerlerden üretilen çeyreklikleri (quantile) kullanır.</p>
+      <p><b>Levene testi</b>: H₀ = grupların varyansları eşit. <b>p &gt; .05</b> → varyanslar homojen, varsayım sağlandı.</p>
+      <p class="src">SPSS: Analyze › Descriptive Statistics › Explore › Plots › Normality plots with tests</p>
+      <div class="note"><b>Ters mantık tuzağı:</b> Normallik ve Levene testlerinde <b>p &gt; .05 istenen sonuçtur</b> (varsayım sağlanır). t-testi/ANOVA'da ise <b>p &lt; .05</b> "anlamlı fark var" demektir.</div>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>Parametrik test şartları</h3>
+        <ul>
+          <li><b>Evrenle ilgili:</b> normal dağılım, homojen varyans</li>
+          <li><b>Örneklemle ilgili:</b> denekler rastgele ve birbirinden bağımsız seçilmeli</li>
+          <li>Veri <b>en az eşit aralıklı</b> ölçekte (test edilemez, bakılarak anlaşılır)</li>
+          <li>Bağımlı t-testinde normal olması gereken şey <b>fark puanlarının</b> dağılımıdır.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Varsayım sağlanmazsa</h3>
+        <ul>
+          <li>Hiçbiri sağlanmıyorsa → parametrik olmayan test</li>
+          <li>Bazıları sağlanıyorsa → dönüşüm (log, karekök, 1/x)</li>
+          <li>Örneklem büyüklüğünü artırmak</li>
+        </ul>
+        <p style="font-size:15px">Parametrik olmayan testler veriyi sıralar (en küçüğe 1, sonrakine 2…) ve sıralar üzerinden çalışır.</p>
+      </div>
+    </div>
+
+    <h2>6. Hangi test? Araştırma sorusundan başla</h2>
+    <div class="block">
+      <ul>
+        <li>İki grubun ortalaması farklı mı? → <b>bağımsız örneklem t-testi</b> (non-par: Mann-Whitney U / Wilcoxon rank-sum)</li>
+        <li>Bir grubun iki koşulu (öncesi/sonrası) farklı mı? → <b>bağımlı (eşleştirilmiş) t-testi</b> (non-par: Wilcoxon signed-rank)</li>
+        <li>İkiden fazla grup farklı mı? → <b>tek yönlü ANOVA</b> (non-par: Kruskal-Wallis)</li>
+        <li>İki değişken arasındaki ilişki? → <b>Pearson</b> (iki sürekli) / <b>Spearman</b> (sıralama)</li>
+        <li>Bağımsız değişken bağımlıyı ne kadar yordar? → <b>basit</b> (1 bağımsız) ya da <b>çoklu doğrusal regresyon</b> (2+ bağımsız)</li>
+      </ul>
+      <div class="note"><b>Önemli:</b> Fark sorusu korelasyonla cevaplanamaz. Önce araştırma sorusu, sonra yöntem.</div>
+    </div>
+
+    <h2>7. SPSS uygulamaları ve çıktı okuma</h2>
+    <div class="block">
+      <ul>
+        <li>Veri girişi: Data View'da elle ya da <span class="path">File › Open › Data</span> (Excel, SAS, Stata, text). Nitel değişken → <b>String</b>, nicel → <b>Numeric</b> (Variable Type'ı kontrol et).</li>
+        <li>Frekans/bar: <span class="path">Analyze › Descriptive Statistics › Frequencies</span></li>
+        <li>Çapraz tablo: <span class="path">Analyze › Descriptive Statistics › Crosstabs</span></li>
+        <li>Betimsel + Z puanı: <span class="path">Descriptives</span> › "Save standardized values as variables" (Z sütunu verinin en sağına eklenir)</li>
+        <li>T puanı: <span class="path">Transform › Compute</span> ile <code>T = 50 + 10*Z</code></li>
+        <li>Grup ortalamaları: <span class="path">Analyze › Compare Means › Means</span> (Dependent List + Independent List)</li>
+        <li>Bağımsız t: <span class="path">Compare Means › Independent-Samples T Test</span> › Test Variable + Grouping Variable › <b>Define Groups</b> (kodlamayla birebir aynı: 0-1, E-K…)</li>
+        <li>Bağımlı t: <span class="path">Compare Means › Paired-Samples T Test</span> (VİZE ↔ FİNAL)</li>
+        <li>Mann-Whitney: <span class="path">Nonparametric Tests › 2 Independent Samples</span> › <b>Define Range</b> (örn. 1 ve 2)</li>
+        <li>Wilcoxon: <span class="path">Nonparametric Tests › 2 Related Samples</span></li>
+      </ul>
+      <div class="tbl" style="margin-top:10px"><table>
+        <thead><tr><th>Derste örnek (SINAVDATA)</th><th>Test</th><th>Sig. (p)</th><th>Karar</th></tr></thead>
+        <tbody>
+          <tr><td>Kız-erkek VİZE</td><td>Bağımsız t</td><td>.000</td><td><span class="pill g">anlamlı fark var</span></td></tr>
+          <tr><td>Kız-erkek YAŞ</td><td>Bağımsız t</td><td>.300</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>Kız-erkek FİNAL</td><td>Bağımsız t</td><td>.097</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>VİZE vs FİNAL (tüm sınıf)</td><td>Bağımlı t</td><td>.000</td><td><span class="pill g">anlamlı fark var</span></td></tr>
+          <tr><td>VİZE vs VİZE2</td><td>Bağımlı t</td><td>.761</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>İki ilacın ağrı düzeyi</td><td>Mann-Whitney U</td><td>&gt; .05</td><td><span class="pill r">fark yok</span></td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:10px;font-size:15px">Mann-Whitney menüsündeki diğer testler: <b>Kolmogorov-Smirnov Z</b> (iki grup aynı dağılımdan mı), <b>Moses Extreme Reactions</b> (Levene'e benzer, yayılımı karşılaştırır), <b>Wald-Wolfowitz runs</b> (grup içi sıralamalardan farklılık).</p>
+    </div>
+
+    <h2>8. Tek yönlü ANOVA</h2>
+    <div class="block">
+      <div class="src">Kaynak: Dr. Sedat Şen, 3. Sunum (dosya adı: 4-sunum)</div>
+      <h3>Neden 3 ayrı t-testi yapmıyoruz? Familywise hata</h3>
+      <p>Her t-testinde α = .05 ise I. tür hata yapmama olasılığı .95'tir. k test yapılırsa:</p>
+      <div class="formula">Familywise hata = 1 − (0,95)<sup>k</sup><br>
+3 test → 1 − 0,95³ = 1 − 0,857 = <b>0,143</b> (%14,3)<br>
+10 test → 1 − 0,95¹⁰ = <b>0,401</b> (%40)</div>
+      <p>Buna <b>familywise</b> ya da <b>experimentwise hata oranı</b> denir. Bu yüzden 2'den fazla grup için ANOVA kullanılır.</p>
+      <h3 style="margin-top:12px">Hipotezler ve karar</h3>
+      <p>H₀: μ₁ = μ₂ = μ₃ (tüm grup ortalamaları eşit). H₁: en az bir grup farklı. t-testinde t değeri, ANOVA'da <b>F oranı</b> kullanılır. p &lt; .05 → H₀ reddedilir, gruplar arasında anlamlı fark var.</p>
+      <div class="note"><b>F sadece "bir yerde fark var" der.</b> Farkın hangi gruplar arasında olduğunu söylemez. Bunun için post hoc test ya da planlı karşılaştırma gerekir.</div>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>ANOVA varsayımları</h3>
+        <ul>
+          <li>Varyansların homojenliği (Levene)</li>
+          <li>Verilerin bağımsızlığı</li>
+          <li>Bağımlı değişken en az eşit aralıklı ölçekte</li>
+          <li><b>Grup içi</b> normallik (her grup için ayrı ayrı)</li>
+          <li>Bir kategorik grup değişkeni</li>
+        </ul>
+        <p style="font-size:15px">Grup büyüklükleri eşitse (n₁ = n₂ = n₃) ANOVA normallik ve varyans homojenliği ihlallerine <b>dirençlidir</b>.</p>
+      </div>
+      <div class="block">
+        <h3>Varsayım bozulursa</h3>
+        <ul>
+          <li><b>Levene p &lt; .05</b> → ANOVA tablosundaki F ve p kullanılmaz. Yerine <b>Welch F (1951)</b> veya <b>Brown-Forsythe F (1974)</b>. İkisi de I. tür hatayı kontrol eder; <b>Welch daha güçlüdür</b>. Brown-Forsythe grup varyanslarını n/N ile ağırlıklandırır.</li>
+          <li><b>Normallik bozuk</b> → örneklemi büyüt, veriyi dönüştür ve dönüştürülmüş veride ANOVA yap, ya da <b>Kruskal-Wallis</b>.</li>
+        </ul>
+        <p class="src">SPSS: Analyze › Compare Means › One-Way ANOVA › Options › Homogeneity of variance test, Brown-Forsythe, Welch, Descriptive</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Planlı karşılaştırma vs. post hoc</h3>
+      <p><b>Planlı zıtlık (contrast):</b> araştırmacının önceden <b>spesifik hipotezi</b> varsa; açıklanan varyans parçalara bölünür, gruplara ağırlık verilir.</p>
+      <p><b>Post hoc çoklu karşılaştırma:</b> spesifik hipotez yoksa, veri keşfedilir; tüm grup çiftleri ikişerli karşılaştırılır ve familywise hata .05'te tutulur. Aslında her çift için yapılan, hatası düzeltilmiş t-testleridir.</p>
+      <p><b>Bonferroni düzeltmesi:</b> α / karşılaştırma sayısı. 10 karşılaştırma → .05 / 10 = <b>.005</b>.</p>
+      <div class="note"><b>Takas:</b> I. tür hatayı düşürmek II. tür hatayı artırır. II. tür hata = 1 − güç, yani testin gücü azalır. Post hoc seçerken: I. tür hata kontrolü, II. tür hata kontrolü ve varsayım ihlallerine güvenirlik birlikte düşünülür.</div>
+      <div class="tbl" style="margin-top:12px"><table>
+        <thead><tr><th>Durum</th><th>Önerilen post hoc</th></tr></thead>
+        <tbody>
+          <tr><td>Grup n'leri eşit, varyanslar homojen</td><td><b>Tukey HSD</b> veya REGWQ</td></tr>
+          <tr><td>Grup n'leri arasında az fark</td><td><b>Gabriel</b></td></tr>
+          <tr><td>Grup n'leri çok farklı</td><td><b>Hochberg GT2</b></td></tr>
+          <tr><td>Varyans homojenliğinden şüphe</td><td><b>Games-Howell</b> (küçük örneklemde liberal, eşit olmayan n'de de doğru)</td></tr>
+          <tr><td>Varyanslar farklı, diğer seçenekler</td><td>Tamhane T2 (tutucu), Dunnett T3, Dunnett C (çok küçük I. tür hata)</td></tr>
+          <tr><td>Çok tutucu olmak isteniyorsa</td><td><b>Bonferroni</b></td></tr>
+          <tr><td>Gruplar bir kontrol grubuyla kıyaslanacaksa</td><td>Dunnett</td></tr>
+        </tbody>
+      </table></div>
+      <p class="src" style="margin-top:8px">Kaynak: M. Kayri, "Araştırmalarda gruplar arası farkın belirlenmesine yönelik çoklu karşılaştırma (post-hoc) teknikleri," Fırat Üniv. Sosyal Bilimler Derg., 2009.</p>
+    </div>
+
+    <div class="two">
+      <div class="block">
+        <h3>Etki büyüklüğü</h3>
+        <p>p değeri istatistiksel anlamlılığı, etki büyüklüğü <b>pratik önemi</b> gösterir. SPSS ANOVA'da vermez, elle hesaplanır.</p>
+        <div class="formula">η² = SS<sub>gruplar arası</sub> / SS<sub>toplam</sub><br>
+ω² = (SS<sub>ga</sub> − df<sub>ga</sub>·MS<sub>gi</sub>) / (SS<sub>t</sub> + MS<sub>gi</sub>)<br>
+ε² = (SS<sub>ga</sub> − df<sub>ga</sub>·MS<sub>gi</sub>) / SS<sub>t</sub></div>
+        <p>Sunumdaki örnek: η² = 307,086 / 5988,981 = <b>0,0512</b>. η² yanlı olduğu için ω² ve ε² önerilmiştir.</p>
+        <p><b>Cohen (1988):</b> küçük 0,01 · orta 0,059 · büyük 0,138. η² = 0,50 → varyansın %50'si bağımsız değişkenle açıklanır.</p>
+      </div>
+      <div class="block">
+        <h3>Raporlama ve sunumdaki örnekler</h3>
+        <p>Raporda mutlaka <b>F değeri, serbestlik dereceleri ve p</b> verilir, önce betimsel istatistikler sunulur. Örn: <i>F(2, 69) = 21,60, p &lt; .001, η² = .39</i>.</p>
+        <ul>
+          <li>3 sınıf, VİZE: p = .268 → <span class="pill r">fark yok</span></li>
+          <li>3 sınıf, YAŞ: p = .008 → <span class="pill g">fark var</span>; post hoc: sadece 2. ve 3. sınıf arasında</li>
+          <li>SPSS: bağımlı değişken → Dependent List, grup → Factor. Birden çok bağımlı değişken aynı anda analiz edilebilir.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Kruskal-Wallis H testi (non-parametrik ANOVA)</h3>
+      <ul>
+        <li>ANOVA varsayımları sağlanmazsa kullanılır. Sıralar (rank) üzerinden çalışır.</li>
+        <li>SPSS: <span class="path">Analyze › Nonparametric Tests › Legacy › K Independent Samples</span> › Test Variable List + Grouping Variable › <b>Define Range</b> (örn. 1–3)</li>
+        <li>Asymp. Sig. 0,05 ile karşılaştırılır. Sunumdaki 3 ilaç örneğinde fark çıkmamıştır.</li>
+        <li>Etki büyüklüğü: <code>η² = χ² / N</code> → 1,473 / 15 = <b>0,098</b></li>
+        <li><b>Kendi post hoc'u yoktur.</b> Anlamlı çıkarsa olası tüm ikililer <b>Mann-Whitney U</b> ile kıyaslanır (Bonferroni düzeltmesiyle yapmak iyi uygulamadır).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= KOPYA KAĞIDI ================= -->
+  <section class="panel" id="kopya" role="tabpanel" hidden>
+    <h2>Test seçim akışı (ortalama karşılaştırma)</h2>
+    <div class="two">
+      <div class="block tree">
+        <div class="q">İki örneklem</div>
+        <div class="branch">
+          <div>Normallik (K-S) sağlanıyor mu?</div>
+          <div class="branch">
+            <div class="leaf"><span class="cond">Evet + bağımlı ölçümler →</span><span class="test">Eşleştirilmiş t-testi</span></div>
+            <div class="leaf"><span class="cond">Evet + bağımsız + Levene p &gt; .05 →</span><span class="test">Bağımsız t (pooled)</span></div>
+            <div class="leaf"><span class="cond">Evet + bağımsız + varyanslar eşit değil →</span><span class="test">Bağımsız t (unpooled / Welch)</span></div>
+            <div class="leaf"><span class="cond">Hayır →</span><span class="test">Mann-Whitney U</span><span class="post">(bağımlıysa: Wilcoxon signed-rank)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="block tree">
+        <div class="q">İkiden fazla örneklem</div>
+        <div class="branch">
+          <div>Bağımsızlık · Normallik (K-S) · Eşit varyans (Levene)</div>
+          <div class="branch">
+            <div class="leaf"><span class="cond">Hepsi sağlanıyor →</span><span class="test">Tek yönlü ANOVA</span><span class="post">post hoc: Tukey HSD</span></div>
+            <div class="leaf"><span class="cond">Normal ama varyans eşit değil →</span><span class="test">Welch testi</span><span class="post">post hoc: Games-Howell</span></div>
+            <div class="leaf"><span class="cond">İkisi de sağlanmıyor →</span><span class="test">Kruskal-Wallis</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Parametrik ↔ parametrik olmayan</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Durum</th><th>Parametrik</th><th>Parametrik olmayan</th></tr></thead>
+      <tbody>
+        <tr><td>2 bağımsız grup</td><td>Bağımsız örneklem t-testi</td><td>Mann-Whitney U / Wilcoxon rank-sum</td></tr>
+        <tr><td>2 bağımlı ölçüm</td><td>Eşleştirilmiş (paired) t-testi</td><td>Wilcoxon signed-rank</td></tr>
+        <tr><td>&gt; 2 bağımsız grup</td><td>Tek yönlü ANOVA</td><td>Kruskal-Wallis</td></tr>
+        <tr><td>İlişki</td><td>Pearson</td><td>Spearman</td></tr>
+        <tr><td>Kategorik ilişki</td><td>–</td><td>Ki-kare</td></tr>
+        <tr><td>Varsayılan dağılım / varyans</td><td>Normal / homojen</td><td>Yok / yok</td></tr>
+        <tr><td>Ölçek</td><td>Eşit aralıklı, eşit oranlı</td><td>Sınıflama, sıralama</td></tr>
+        <tr><td>Merkezi eğilim</td><td>Aritmetik ortalama</td><td>Medyan</td></tr>
+        <tr><td>Artısı</td><td>Daha fazla sonuç çıkarılır (daha güçlü)</td><td>Basit, uç değerlerden az etkilenir</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>p değeri okuma</h2>
+    <div class="two">
+      <div class="block">
+        <h3>Fark testleri (t, ANOVA, M-W…)</h3>
+        <p><span class="pill g">p &lt; .05</span> H₀ reddedilir → gruplar arasında <b>anlamlı fark var</b></p>
+        <p><span class="pill r">p &gt; .05</span> H₀ reddedilemez → <b>anlamlı fark yok</b></p>
+      </div>
+      <div class="block">
+        <h3>Varsayım testleri (K-S, S-W, Levene)</h3>
+        <p><span class="pill g">p &gt; .05</span> varsayım <b>sağlanıyor</b> (normal / varyanslar eşit)</p>
+        <p><span class="pill r">p &lt; .05</span> varsayım <b>bozuk</b></p>
+      </div>
+    </div>
+
+    <h2>Formüller ve sayılar</h2>
+    <div class="two">
+      <div class="block">
+        <div class="formula">X̄ = ΣX / n</div>
+        <div class="formula">S² = Σ(X − X̄)² / (n − 1)&nbsp;&nbsp;&nbsp;S = √S²</div>
+        <div class="formula">Ranj = Maks − Min</div>
+        <div class="formula">Z = (X − X̄) / S&nbsp;&nbsp;&nbsp;T = 50 + 10Z</div>
+        <div class="formula">z<sub>çarp</sub> = çarpıklık / SE → |z| &gt; 1,96 bozuk</div>
+      </div>
+      <div class="block">
+        <ul>
+          <li>Medyan: sırala; n tekse ortadaki, çiftse ortadaki ikisinin ortalaması</li>
+          <li>Normal dağılım: %68,26 · %95,44 · %99,74 (±1, ±2, ±3 SS)</li>
+          <li>|Z| &gt; 3 → uç değer</li>
+          <li>Çarpıklık/basıklık ±2 dışında → normal değil</li>
+          <li>Ort &gt; Med &gt; Mod → sağa çarpık; Ort &lt; Med &lt; Mod → sola çarpık</li>
+          <li>Tekrar sayısı &gt; 1 olmalı (deneysel hata için)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Deney tasarımı: 3 ilke tek satırda</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>İlke</th><th>Ne yapar?</th><th>Neden?</th></tr></thead>
+      <tbody>
+        <tr><td>Bloklama</td><td>Birimleri içte homojen, arada heterojen bloklara ayırır</td><td>Deneysel hatayı azaltır, hassaslığı artırır</td></tr>
+        <tr><td>Rasgeleleştirme</td><td>Denemeleri birimlere eşit olasılıkla atar</td><td>Sistematik etkiyi kontrol eder, yanlılığı önler</td></tr>
+        <tr><td>Tekrar</td><td>Her denemeyi birden fazla birime uygular</td><td>Hatanın hesaplanması ve küçülmesi</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>ANOVA hızlı bakış</h2>
+    <div class="two">
+      <div class="block">
+        <div class="formula">Familywise = 1 − 0,95<sup>k</sup>&nbsp;&nbsp;(3 → .143, 10 → .401)</div>
+        <div class="formula">Bonferroni α' = .05 / k</div>
+        <div class="formula">F = MS<sub>ga</sub> / MS<sub>gi</sub>&nbsp;&nbsp;MS = SS / df<br>df<sub>ga</sub> = k − 1&nbsp;&nbsp;df<sub>gi</sub> = N − k</div>
+        <div class="formula">η² = SS<sub>ga</sub> / SS<sub>t</sub>&nbsp;&nbsp;KW: η² = χ² / N</div>
+        <p style="font-size:15px">Cohen: .01 küçük · .059 orta · .138 büyük</p>
+      </div>
+      <div class="block">
+        <ul>
+          <li>Levene p &gt; .05 → klasik F + <b>Tukey</b></li>
+          <li>Levene p &lt; .05 → <b>Welch / Brown-Forsythe F</b> + <b>Games-Howell</b></li>
+          <li>Normallik bozuk → dönüşüm ya da <b>Kruskal-Wallis</b> + ikili <b>Mann-Whitney</b></li>
+          <li>n'ler eşitse ANOVA ihlallere dirençli</li>
+          <li>n az farklı → Gabriel · çok farklı → Hochberg GT2</li>
+          <li>I. tür hata ↓ ⇒ II. tür hata ↑ ⇒ güç ↓</li>
+          <li>Rapor: F(df<sub>ga</sub>, df<sub>gi</sub>) = …, p = …, η² = …</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VERİ SETLERİ ================= -->
+  <section class="panel" id="veri" role="tabpanel" hidden>
+    <p class="lead" style="margin-top:6px">Üç veri setinin SPSS'te yapılacak analizleri, beklenen sonuçlar ve yorumları. Değerler Python (scipy) ile hesaplandı; SPSS çıktısıyla son basamakta küçük farklar olabilir. K-S değerleri SPSS'in Explore'da verdiği Lilliefors düzeltmeli versiyondur.</p>
+
+    <h2>Veri seti 1 · Betimleyici istatistikler</h2>
+    <div class="block">
+      <p>İki deney grubu: <b>Grup 1 (n = 50)</b>, <b>Grup 2 (n = 31)</b>. SPSS'e girerken iki ayrı sütun yerine <b>uzun format</b> kullan: bir sütunda puan, diğerinde grup kodu (1/2). Grup karşılaştırmaları ancak böyle yapılır.</p>
+      <p class="src">Analyze › Descriptive Statistics › Frequencies (Statistics) ya da Explore (Factor List = grup)</p>
+      <div class="tbl" style="margin-top:8px"><table>
+        <thead><tr><th>İstatistik</th><th>Grup 1</th><th>Grup 2</th></tr></thead>
+        <tbody>
+          <tr><td>n</td><td>50</td><td>31</td></tr>
+          <tr><td>Minimum / Maksimum</td><td>25 / 100</td><td>44 / 96</td></tr>
+          <tr><td>Ranj</td><td>75</td><td>52</td></tr>
+          <tr><td>Ortalama</td><td>64,10</td><td>68,97</td></tr>
+          <tr><td>Medyan</td><td>57,50</td><td>67,00</td></tr>
+          <tr><td>Mod</td><td>52</td><td>67</td></tr>
+          <tr><td>Q1 / Q3 (SPSS yöntemi)</td><td>52,0 / 75,0</td><td>61,0 / 77,0</td></tr>
+          <tr><td>Standart sapma</td><td>16,11</td><td>12,36</td></tr>
+          <tr><td>Varyans</td><td>259,36</td><td>152,77</td></tr>
+          <tr><td>Çarpıklık (SE) → z</td><td>0,496 (0,337) → 1,47</td><td>0,111 (0,421) → 0,26</td></tr>
+          <tr><td>Basıklık (SE) → z</td><td>0,015 (0,662) → 0,02</td><td>−0,016 (0,821) → −0,02</td></tr>
+          <tr><td>K-S (Lilliefors)</td><td>D = .170, <b>p = .001</b></td><td>D = .112, p = .417</td></tr>
+          <tr><td>Shapiro-Wilk</td><td>W = .937, <b>p = .010</b></td><td>W = .986, p = .948</td></tr>
+          <tr><td>En büyük |Z|</td><td>2,43 (25 puan)</td><td>2,19 (96 puan)</td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:14px">Yorum</h3>
+      <ul>
+        <li><b>Grup 1:</b> Ortalama (64,10) &gt; Medyan (57,5) &gt; Mod (52) → <b>sağa (pozitif) çarpık</b>. Puanların çoğu 50–60 arasında toplanmış, birkaç yüksek puan (92–100) ortalamayı yukarı çekmiş.</li>
+        <li>Grup 1'de çarpıklık ±2 içinde ve z = 1,47 &lt; 1,96, yani sayısal kritere göre kabul edilebilir. Ama K-S ve Shapiro-Wilk p &lt; .05 → <b>normallik reddedilir</b>. Kriterler farklı sonuç verebilir; testler daha katıdır.</li>
+        <li><b>Grup 2:</b> ortalama, medyan ve mod birbirine yakın, çarpıklık ≈ 0, testler p &gt; .05 → <b>normal dağılım</b>.</li>
+        <li>|Z| &gt; 3 olan değer yok → <b>uç değer yok</b>. Grup 1 daha heterojen (ss 16,1 vs 12,4).</li>
+      </ul>
+      <details class="work" style="margin-top:10px">
+        <summary>Ek: iki grup farklı mı?</summary>
+        <p>Levene: F = 3,89, p = .052 (sınırda, varyanslar eşit kabul edilir). Bağımsız t: t(79) = −1,44, <b>p = .154</b>. Grup 1 normal olmadığı için Mann-Whitney daha uygun: U = 586,5, <b>p = .068</b> (ortalama sıralar 37,2 ve 47,1). İkisinde de <span class="pill r">anlamlı fark yok</span>.</p>
+      </details>
+    </div>
+
+    <h2>Veri seti 2 · İkili kıyaslamalar (t-testleri)</h2>
+    <div class="block">
+      <p>n = 24 öğrenci (<b>17 E, 7 K</b>); değişkenler: CİNSİYET, KİTAP, YAŞ, VİZE, VİZE2, FİNAL. CİNSİYET'i E/K olarak girersen <b>String</b> olur; Define Groups'a E ve K yazılır.</p>
+      <h3>a) Bağımsız örneklem t-testi (cinsiyete göre)</h3>
+      <p class="src">Analyze › Compare Means › Independent-Samples T Test › Grouping Variable = CİNSİYET (E, K)</p>
+      <div class="tbl" style="margin-top:8px"><table>
+        <thead><tr><th>Değişken</th><th>Erkek X̄ (ss)</th><th>Kız X̄ (ss)</th><th>Levene p</th><th>Okunacak satır</th><th>t (df)</th><th>p</th><th>Karar</th></tr></thead>
+        <tbody>
+          <tr><td>VİZE</td><td>59,76 (9,40)</td><td>71,43 (10,44)</td><td>.898</td><td>Equal var. assumed</td><td>−2,68 (22)</td><td>.014</td><td><span class="pill g">fark var</span></td></tr>
+          <tr><td>VİZE2</td><td>59,94 (9,30)</td><td>71,29 (10,44)</td><td>.904</td><td>Equal var. assumed</td><td>−2,62 (22)</td><td>.015</td><td><span class="pill g">fark var</span></td></tr>
+          <tr><td>FİNAL</td><td>79,06 (15,55)</td><td>94,29 (3,77)</td><td><b>.018</b></td><td><b>Not assumed</b></td><td>−3,78 (19,8)</td><td>.001</td><td><span class="pill g">fark var</span></td></tr>
+          <tr><td>YAŞ</td><td>21,18 (2,01)</td><td>23,14 (2,67)</td><td>.256</td><td>Equal var. assumed</td><td>−1,98 (22)</td><td>.060</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>KİTAP</td><td>6,24 (3,98)</td><td>7,57 (6,02)</td><td>.112</td><td>Equal var. assumed</td><td>−0,64 (22)</td><td>.527</td><td><span class="pill r">fark yok</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul style="margin-top:10px">
+        <li><b>FİNAL tuzağı:</b> Levene p = .018 &lt; .05, varyanslar eşit değil (kızlarda ss sadece 3,77). Alt satır (unpooled/Welch) okunur. Üst satır da anlamlı (p = .019) ama doğru olan alt satır.</li>
+        <li><b>YAŞ:</b> p = .060, .05'e çok yakın ama anlamlı değil. "Neredeyse anlamlı" diye yorumlanmaz.</li>
+        <li>Kız grubu küçük (n = 7). Küçük gruplarda normallik daha zor değerlendirilir; Mann-Whitney ile kontrol: VİZE p = .018, FİNAL p = .016, YAŞ p = .108, KİTAP p = .898. <b>Kararlar aynı.</b></li>
+        <li>KİTAP erkeklerde normal değil (S-W p = .036), Mann-Whitney yine fark yok diyor.</li>
+      </ul>
+      <p class="key" style="margin-top:6px">Rapor örneği: Kız öğrencilerin vize puanları (X̄ = 71,43, ss = 10,44) erkeklerden (X̄ = 59,76, ss = 9,40) anlamlı olarak yüksektir, t(22) = −2,68, p = .014.</p>
+
+      <h3 style="margin-top:16px">b) Bağımlı (eşleştirilmiş) örneklem t-testi</h3>
+      <p class="src">Analyze › Compare Means › Paired-Samples T Test</p>
+      <div class="tbl" style="margin-top:8px"><table>
+        <thead><tr><th>Çift</th><th>Ortalamalar</th><th>Fark X̄ (ss)</th><th>t (23)</th><th>p</th><th>Wilcoxon p</th><th>Karar</th></tr></thead>
+        <tbody>
+          <tr><td>VİZE – FİNAL</td><td>63,17 / 83,50</td><td>−20,33 (15,33)</td><td>−6,50</td><td>&lt; .001</td><td>&lt; .001</td><td><span class="pill g">fark var</span></td></tr>
+          <tr><td>VİZE – VİZE2</td><td>63,17 / 63,25</td><td>−0,08 (1,35)</td><td>−0,30</td><td>.765</td><td>.952</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>VİZE2 – FİNAL</td><td>63,25 / 83,50</td><td>−20,25 (15,75)</td><td>−6,30</td><td>&lt; .001</td><td>&lt; .001</td><td><span class="pill g">fark var</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul style="margin-top:10px">
+        <li>Bağımlı t-testinde normal olması gereken <b>fark puanlarıdır</b>. VİZE–FİNAL farkı normal (S-W p = .668).</li>
+        <li>VİZE–VİZE2 farkı normal değil (S-W p &lt; .001; farkların çoğu 0). Bu yüzden <b>Wilcoxon signed-rank</b> uygun: p = .952, sonuç değişmez.</li>
+        <li>SPSS çıktısında SINAVDATA ile aynı mantık: Sig. değeri p'dir; "Sig. (2-tailed) .000" → p &lt; .001 yazılır.</li>
+      </ul>
+    </div>
+
+    <h2>Veri seti 3 · Çoklu kıyaslamalar (ANOVA)</h2>
+    <div class="block">
+      <p>3 yaş grubunun antikor sayısı: <b>Genç (0–45)</b>, <b>Orta yaş (45–90)</b>, <b>İleri yaş (90+)</b>, her grupta n = 24, N = 72. SPSS için ikinci (uzun) format kullanılır: Denek grubu (1/2/3) + Antikor sayısı.</p>
+      <div class="note"><b>Fark ettin mi?</b> Bu üç sütun, Veri seti 2'deki VİZE, VİZE2 ve FİNAL değerleriyle birebir aynı. Hoca aynı sayıları "bağımsız gruplar" olarak yeniden etiketlemiş. Gerçekte aynı kişilerin tekrarlı ölçümleri olsaydı tek yönlü ANOVA değil tekrarlı ölçümler ANOVA gerekirdi; burada gruplar bağımsız kabul ediliyor.</div>
+      <p class="src" style="margin-top:10px">Analyze › Compare Means › One-Way ANOVA › Dependent List = Antikor, Factor = Grup › Options: Descriptive, Homogeneity, Brown-Forsythe, Welch › Post Hoc: Tukey, Games-Howell</p>
+
+      <div class="tbl" style="margin-top:8px"><table>
+        <thead><tr><th>Grup</th><th>X̄</th><th>ss</th><th>Medyan</th><th>Çarpıklık (z)</th><th>Shapiro-Wilk p</th></tr></thead>
+        <tbody>
+          <tr><td>Genç</td><td>63,17</td><td>10,92</td><td>64,0</td><td>−0,14 (−0,30)</td><td>.834</td></tr>
+          <tr><td>Orta yaş</td><td>63,25</td><td>10,79</td><td>64,0</td><td>−0,15 (−0,31)</td><td>.950</td></tr>
+          <tr><td>İleri yaş</td><td>83,50</td><td>14,90</td><td>89,5</td><td>−0,96 (<b>−2,02</b>)</td><td><b>.012</b></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:14px">Varsayımlar</h3>
+      <ul>
+        <li><b>Levene</b> (ortalamaya göre): F(2, 69) = 2,08, p = .133 → varyanslar homojen.</li>
+        <li><b>Normallik:</b> İleri yaş grubu normal değil (S-W p = .012, sola çarpık; çok sayıda 90–100 değeri var). Ama n'ler eşit (24-24-24), ANOVA bu ihlale dirençli. Yine de Kruskal-Wallis ile kontrol ediyoruz.</li>
+      </ul>
+
+      <h3 style="margin-top:10px">ANOVA tablosu</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Kaynak</th><th>SS</th><th>df</th><th>MS</th><th>F</th><th>p</th></tr></thead>
+        <tbody>
+          <tr><td>Gruplar arası</td><td>6588,11</td><td>2</td><td>3294,06</td><td>21,60</td><td>&lt; .001</td></tr>
+          <tr><td>Gruplar içi</td><td>10523,83</td><td>69</td><td>152,52</td><td></td><td></td></tr>
+          <tr><td>Toplam</td><td>17111,94</td><td>71</td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:8px">Robust testler: Welch F(2; 45,2) = 17,34, p &lt; .001. Brown-Forsythe F* = 21,60 (n'ler eşit olduğunda klasik F ile aynı çıkar), p &lt; .001.</p>
+
+      <h3 style="margin-top:10px">Etki büyüklüğü</h3>
+      <div class="formula">η² = 6588,11 / 17111,94 = 0,385&nbsp;&nbsp;→ büyük (&gt; 0,138)<br>
+ω² = (6588,11 − 2·152,52) / (17111,94 + 152,52) = 0,364<br>
+ε² = (6588,11 − 2·152,52) / 17111,94 = 0,367</div>
+      <p>Antikor sayısındaki varyansın yaklaşık %38'i yaş grubuyla açıklanıyor.</p>
+
+      <h3 style="margin-top:10px">Post hoc (Tukey HSD; n'ler eşit, varyans homojen)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Karşılaştırma</th><th>Ort. farkı</th><th>Tukey p</th><th>Games-Howell p</th><th>Karar</th></tr></thead>
+        <tbody>
+          <tr><td>Genç – Orta yaş</td><td>−0,08</td><td>1,000</td><td>1,000</td><td><span class="pill r">fark yok</span></td></tr>
+          <tr><td>Genç – İleri yaş</td><td>−20,33</td><td>&lt; .001</td><td>&lt; .001</td><td><span class="pill g">fark var</span></td></tr>
+          <tr><td>Orta yaş – İleri yaş</td><td>−20,25</td><td>&lt; .001</td><td>&lt; .001</td><td><span class="pill g">fark var</span></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="margin-top:14px">Kruskal-Wallis kontrolü</h3>
+      <p>χ²(2) = 24,07, p &lt; .001. η² = 24,07 / 72 = <b>0,334</b>. İkili Mann-Whitney: Genç–Orta p = .992; Genç–İleri ve Orta–İleri p &lt; .001 (Bonferroni α' = .05/3 = .0167 ile de anlamlı).</p>
+      <p class="key">Rapor örneği: Yaş grupları arasında antikor sayısı açısından anlamlı fark vardır, F(2, 69) = 21,60, p &lt; .001, η² = .39. Tukey testine göre ileri yaş grubunun ortalaması (83,50) hem genç (63,17) hem orta yaş (63,25) grubundan anlamlı olarak yüksektir; genç ve orta yaş grupları arasında fark yoktur.</p>
+    </div>
+  </section>
+
+  <!-- ================= SORULAR ================= -->
+  <section class="panel" id="sorular" role="tabpanel" hidden>
+    <div class="row">
+      <h2 style="margin:0">Çoktan seçmeli</h2>
+      <div class="row" style="gap:12px"><span class="score" id="score">0 / 0 doğru</span><button class="btn" id="reset" type="button">Sıfırla</button></div>
+    </div>
+    <div id="quiz" style="display:grid;gap:14px"></div>
+
+    <h2>Hesaplama soruları</h2>
+    <details class="work">
+      <summary>Soru A · Devamsızlık verisi (1. sunum)</summary>
+      <p>Ahmet 5, Ayşe 4, Ali 2, Fatma 4, Mehmet 4, Zeynep 2, Mustafa 3. Mod, medyan, ortalama, ranj, varyans ve standart sapmayı bulun. Dağılım hangi yöne çarpık?</p>
+      <div class="formula">Sıralı: 2, 2, 3, 4, 4, 4, 5&nbsp;&nbsp;(n = 7)<br>
+Mod = 4&nbsp;&nbsp;&nbsp;Medyan = 4 (4. değer)&nbsp;&nbsp;&nbsp;X̄ = 24/7 = 3,43<br>
+Ranj = 5 − 2 = 3<br>
+Σ(X − X̄)² = 2,47 + 3(0,33) + 2(2,04) + 0,18 = 7,71<br>
+S² = 7,71 / 6 = 1,29&nbsp;&nbsp;&nbsp;S = 1,13</div>
+      <p>Ort (3,43) &lt; Medyan (4) = Mod (4) → <b>sola (negatif) çarpık</b>. Düşük değerler (2, 2) ortalamayı aşağı çeker.</p>
+    </details>
+    <details class="work">
+      <summary>Soru B · Z ve T puanı</summary>
+      <p>Aynı veride Ahmet'in (5 gün) ve Ali'nin (2 gün) Z ve T puanlarını bulun. Uç değer var mı?</p>
+      <div class="formula">Z<sub>Ahmet</sub> = (5 − 3,43) / 1,13 = 1,39&nbsp;&nbsp;→ T = 50 + 13,9 = 63,9<br>
+Z<sub>Ali</sub> = (2 − 3,43) / 1,13 = −1,26&nbsp;&nbsp;→ T = 50 − 12,6 = 37,4</div>
+      <p>Hiçbir |Z| 3'ü geçmiyor → <b>uç değer yok</b>.</p>
+    </details>
+    <details class="work">
+      <summary>Soru C · Çapraz tablo (1. sunum)</summary>
+      <p>100 kişi: Evet diyen 10 kadın, 40 erkek; Hayır diyen 20 kadın, 30 erkek. Kadınların yüzde kaçı "Evet" demiştir? "Evet" diyenlerin yüzde kaçı erkektir?</p>
+      <div class="formula">Kadın toplam = 30 → Evet oranı = 10/30 = %33,3<br>
+Evet toplam = 50 → erkek oranı = 40/50 = %80</div>
+      <p>Satır ve sütun yüzdesini karıştırmamak için paydaya hangi toplamın girdiğine dikkat et.</p>
+    </details>
+    <details class="work">
+      <summary>Soru D · Test seçimi senaryoları</summary>
+      <ol>
+        <li>Üç farklı fırın sıcaklığında (10, 20, 30 °C) bakır levhaların sertliği karşılaştırılacak; K-S p = .21, Levene p = .003. → Normal ama varyans eşit değil: <b>Welch testi</b>, post hoc <b>Games-Howell</b>.</li>
+        <li>Aynı 25 işçinin eğitim öncesi ve sonrası montaj süreleri; fark puanları normal. → <b>Eşleştirilmiş t-testi</b>.</li>
+        <li>İki ilacın verdiği ağrı derecesi (1–10 sıralı), n = 12. → <b>Mann-Whitney U</b>.</li>
+        <li>Haftalık çalışma saati ve okunan kitap sayısının sınav puanına etkisi. → <b>Çoklu doğrusal regresyon</b>.</li>
+        <li>Dört makinenin üretim hızı; tüm varsayımlar sağlanıyor, ANOVA p = .01. → Hangi makinelerin farklı olduğunu bulmak için <b>Tukey HSD</b>.</li>
+      </ol>
+    </details>
+  </section>
+</div>
+
+<script>
+(function(){
+  const tabs=[...document.querySelectorAll('nav.tabs button')];
+  function show(id){
+    tabs.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===id)));
+    document.querySelectorAll('section.panel').forEach(s=>s.hidden=s.id!==id);
+    try{localStorage.setItem('tab',id)}catch(e){}
+  }
+  tabs.forEach(b=>b.addEventListener('click',()=>{show(b.dataset.t);window.scrollTo({top:0})}));
+  let start=location.hash.slice(1);
+  if(!['notlar','kopya','veri','sorular'].includes(start)){try{start=localStorage.getItem('tab')}catch(e){start=null}}
+  if(['notlar','kopya','veri','sorular'].includes(start))show(start);
+
+  const Q=[
+    ["Bakır levha deneyinde sıcaklığın 10, 20 ve 30 °C düzeyleri neyi ifade eder?",["Deney birimi","Deneme (treatment)","Blok","Gözlem birimi"],1,"Faktörün (sıcaklık) her bir düzeyine deneme denir. Burada 3 deneme var ve düzey sayısı deneyi yapanın kontrolünde."],
+    ["Cinsiyetin ders notuna etkisinin incelendiği deneyde hangisi doğrudur?",["Cinsiyet nicel bir faktördür","Düzey sayısı deneyi yapanın kontrolündedir","Düzey sayısı deneyi yapanın kontrolünde değildir","Cinsiyet bağımlı değişkendir"],2,"Cinsiyet nitel bir faktördür ve iki düzeyi (kadın/erkek) araştırmacı belirlemez."],
+    ["Deney birimlerini kendi içinde homojen, kendi aralarında heterojen gruplara ayırma işlemi hangisidir?",["Rasgeleleştirme","Tekrar","Bloklama","Örnekleme"],2,"Bloklamanın amacı deneysel hatayı azaltıp deneyin hassaslığını artırmaktır."],
+    ["Tekrar sayısı 1 olursa ne olur?",["Tasarım dengeli olur","Deneysel hata hesaplanamaz","Rasgeleleştirme gereksiz olur","Hata sıfır olur"],1,"Tekrar sayısı birden büyük olmalı; aksi halde deneysel hatanın tahmini yapılamaz."],
+    ["Denemeler rasgele atanmazsa ne olur?",["Deney birimi sayısı azalır","Deneme etkileri ve hata varyansı tahminleri yanlı olur","Tasarım dengesiz olur","Bloklama yapılamaz"],1,"Rasgeleleştirme her birimin her denemeye eşit olasılıkla atanmasını sağlar ve sistematik etkiyi kontrol altına alır."],
+    ["Aynı koşullarda aynı denemeye maruz kalan birimler arasındaki kontrol edilemeyen farklılıklara ne denir?",["Faktör","Deneysel hata","Varyans homojenliği","Blok etkisi"],1,"Tanım gereği bu deneysel hatadır (experimental error)."],
+    ["Örneklemden hesaplanan standart sapma hangi sembolle gösterilir?",["σ","μ","s","ρ"],2,"İstatistikler Latin harfleriyle (s, x̄), parametreler Yunan harfleriyle (σ, μ) gösterilir."],
+    ["Hangisi olasılığa dayalı OLMAYAN bir örnekleme yöntemidir?",["Tabakalı","Küme","Kartopu","Basit seçkisiz"],2,"Kartopu, uygun, kota, amaçlı ve boyutsal örnekleme olasılığa dayalı olmayan yöntemlerdir."],
+    ["Futbolcu forma numarası hangi değişken/ölçek türüne örnektir?",["Nicel, eşit oranlı","Nicel, eşit aralıklı","Nitel, sınıflama","Sıralama"],2,"Forma numarası sayı olsa da azlık-çokluk göstermez; sadece etiket (sınıflama) işlevi görür."],
+    ["Termometreyle ölçülen °C sıcaklık hangi ölçektir?",["Sınıflama","Sıralama","Eşit aralıklı","Eşit oranlı"],2,"Eşit birim vardır ama 0 °C sıcaklığın yokluğu değildir (itibari sıfır). Toplama-çıkarma yapılır, oran kurulamaz."],
+    ["Dört işlemin de uygulanabildiği ölçek hangisidir?",["Sınıflama","Sıralama","Eşit aralıklı","Eşit oranlı"],3,"Eşit oranlı ölçekte gerçek (mutlak) sıfır vardır; en fazla bilgiyi verir."],
+    ["Z puanı 2 olan bir öğrencinin T puanı kaçtır?",["60","70","52","80"],1,"T = 50 + 10·Z = 50 + 20 = 70."],
+    ["Aritmetik ortalama > medyan > mod ise dağılım:",["Simetrik","Sağa (pozitif) çarpık","Sola (negatif) çarpık","Basık"],1,"Ortalama uç değerlere doğru çekilir; kuyruk sağdadır."],
+    ["Normal dağılımda ölçümlerin yaklaşık yüzde kaçı X̄ ± 2SS aralığındadır?",["%68,26","%95,44","%99,74","%50"],1,"±1SS → %68,26, ±2SS → %95,44, ±3SS → %99,74."],
+    ["Shapiro-Wilk testinde p = .23 bulundu. Yorum?",["Veri normal değil","Veri normal dağılımdan anlamlı farklı değil","Varyanslar eşit değil","Gruplar arasında fark var"],1,"Normallik testlerinde p > .05 → veri normal kabul edilir."],
+    ["Levene testinde H₀ nedir?",["Ortalamalar eşittir","Grupların varyansları eşittir","Veri normaldir","Gruplar bağımsızdır"],1,"Levene testi varyans homojenliğini sınar; p > .05 ise varyanslar eşit kabul edilir."],
+    ["Aynı sınıfın VİZE ve FİNAL notlarını karşılaştırmak için hangi test kullanılır?",["Bağımsız t-testi","Eşleştirilmiş (paired) t-testi","Tek yönlü ANOVA","Pearson korelasyonu"],1,"Aynı grubun iki ölçümü bağımlıdır. Derste p = .000 bulunmuş: anlamlı fark var."],
+    ["Bağımsız örneklem t-testinin parametrik olmayan karşılığı:",["Wilcoxon signed-rank","Kruskal-Wallis","Mann-Whitney U","Spearman"],2,"Mann-Whitney U (veya Wilcoxon rank-sum). Wilcoxon signed-rank ise bağımlı t'nin karşılığıdır."],
+    ["Üç grup normal dağılıyor ama Levene p = .01. Hangi test ve post hoc?",["ANOVA + Tukey HSD","Welch + Games-Howell","Kruskal-Wallis + Tukey","Bağımsız t + Levene"],1,"Normallik sağlanmış, varyans homojenliği sağlanmamış: Welch testi ve Games-Howell post hoc."],
+    ["İki sıralı (ordinal) değişken arasındaki ilişki için:",["Pearson","Spearman","t-testi","ANOVA"],1,"Sıralama verisi için parametrik olmayan Spearman sıra korelasyonu kullanılır."],
+    ["Kız-erkek FİNAL karşılaştırmasında Sig. = .097 bulunmuştur. Karar?",["Anlamlı fark var","Anlamlı fark yok","Varyanslar eşit değil","Veri normal değil"],1,".097 > .05 olduğu için H₀ reddedilemez; gruplar arasında anlamlı fark yoktur."],
+    ["SPSS'te bağımsız t-testinde grup değişkeni E-K olarak kodlandıysa Define Groups'a ne girilir?",["0 ve 1","1 ve 2","E ve K","Hiçbir şey"],2,"Define Groups'a veride kullanılan kodlama birebir girilmelidir."],
+    ["Çarpıklık = 0,8 ve SE = 0,3 ise z değeri ve yorum:",["z = 0,24, normal","z = 2,67, normallik bozuk","z = 1,1, normal","z = 2,67, normal"],1,"z = 0,8/0,3 = 2,67 > 1,96 olduğundan α = .05 düzeyinde normallik bozulmuştur."],
+    ["SPSS'te T puanı elde etmek için hangi menü kullanılır?",["Analyze › Compare Means","Transform › Compute","Descriptive › Crosstabs","File › Open › Data"],1,"Önce Descriptives ile Z kaydedilir, sonra Transform › Compute ile T = 50 + 10*Z yazılır."],
+    ["4 grubu ANOVA yerine ikişerli t-testleriyle (α = .05) karşılaştırırsak kaç test yapılır ve familywise hata yaklaşık kaçtır?",["4 test, %5","6 test, %26,5","6 test, %30","3 test, %14,3"],1,"4 grup → 4·3/2 = 6 çift. 1 − 0,95⁶ = 1 − 0,735 = 0,265."],
+    ["ANOVA'da H₀ nedir?",["En az bir ortalama farklıdır","Tüm grup ortalamaları eşittir","Varyanslar farklıdır","Gruplar bağımlıdır"],1,"H₀: μ₁ = μ₂ = μ₃. p < .05 ise reddedilir."],
+    ["ANOVA anlamlı çıktı (p = .008). Bu sonuç bize ne söyler?",["Tüm gruplar birbirinden farklıdır","En az bir grup ortalaması diğerlerinden farklıdır; hangisi olduğunu söylemez","1. ve 3. grup farklıdır","Etki büyüklüğü büyüktür"],1,"F sadece bir yerde fark olduğunu söyler. Hangi gruplar olduğunu post hoc test gösterir."],
+    ["ANOVA'da Levene p = .02 bulundu. Ne yapılmalı?",["ANOVA tablosundaki F kullanılır","Welch veya Brown-Forsythe F kullanılır","Tukey HSD yapılır","Analiz durdurulur"],1,"Varyans homojenliği bozulmuş. Welch (daha güçlü) veya Brown-Forsythe F ve p değerleri raporlanır; post hoc olarak Games-Howell."],
+    ["10 karşılaştırma için Bonferroni düzeltmeli α kaçtır?",[".05",".01",".005",".0005"],2,".05 / 10 = .005."],
+    ["Post hoc testlerle I. tür hatayı düşürmenin bedeli nedir?",["Varyans artar","II. tür hata artar, güç azalır","Örneklem küçülür","Normallik bozulur"],1,"II. tür hata = 1 − güç. I. tür hata kontrolü sıkılaştıkça testin gücü düşer."],
+    ["Grup büyüklükleri çok farklı, varyanslar homojen. Hangi post hoc?",["Tukey HSD","Gabriel","Hochberg GT2","Games-Howell"],2,"n'ler az farklıysa Gabriel, çok farklıysa Hochberg GT2."],
+    ["SS_ga = 307,086 ve SS_toplam = 5988,981 ise η² ve yorumu:",["0,051, küçük-orta arası","0,051, büyük","0,51, büyük","0,0051, etkisiz"],0,"η² = 0,0512. Cohen: küçük 0,01, orta 0,059. 0,051 küçük ile orta arasında, ortaya yakın."],
+    ["Kruskal-Wallis anlamlı çıktı. Farkın kaynağını bulmak için:",["Tukey HSD","Scheffé","İkili Mann-Whitney U testleri","Paired t-test"],2,"Kruskal-Wallis'in kendi post hoc seçeneği yoktur; ikili Mann-Whitney U testleri yapılır."],
+    ["Kruskal-Wallis'te χ² = 1,473, N = 15 ise η²:",["0,098","0,0098","1,473","22,1"],0,"η² = χ² / N = 1,473 / 15 = 0,098."],
+    ["ANOVA hangi durumda normallik ve varyans ihlallerine en dirençlidir?",["Gruplar küçük olduğunda","Grup büyüklükleri eşit olduğunda","Gruplar bağımlı olduğunda","Değişken ordinal olduğunda"],1,"n₁ = n₂ = n₃ olduğunda ANOVA bu ihlallere dirençlidir."],
+    ["Antikor verisinde (3 grup × 24) df_ga ve df_gi nedir?",["2 ve 72","3 ve 69","2 ve 69","2 ve 71"],2,"df_ga = k − 1 = 2, df_gi = N − k = 72 − 3 = 69. Toplam df = 71."],
+    ["Veri seti 2'de FİNAL için Levene p = .018. Hangi t satırı okunur?",["Equal variances assumed","Equal variances not assumed","İkisinin ortalaması","Levene satırı"],1,"Levene anlamlı → varyanslar eşit değil → alt satır (Welch). t(19,8) = −3,78, p = .001."]
+  ];
+  const box=document.getElementById('quiz'),score=document.getElementById('score');
+  let answered=0,correct=0;
+  function render(){
+    box.innerHTML='';answered=0;correct=0;upd();
+    Q.forEach((q,i)=>{
+      const c=document.createElement('div');c.className='qcard';
+      c.innerHTML='<div class="qn">SORU '+(i+1)+'</div><div class="qt"></div><div class="opts"></div><div class="expl" hidden></div>';
+      c.querySelector('.qt').textContent=q[0];
+      const o=c.querySelector('.opts'),ex=c.querySelector('.expl');
+      q[1].forEach((t,j)=>{
+        const b=document.createElement('button');b.type='button';b.textContent=String.fromCharCode(65+j)+') '+t;
+        b.addEventListener('click',()=>{
+          [...o.children].forEach((x,k)=>{x.disabled=true;if(k===q[2])x.classList.add('right')});
+          if(j!==q[2])b.classList.add('wrong');else correct++;
+          answered++;upd();
+          ex.innerHTML='<b>'+(j===q[2]?'Doğru. ':'Yanlış. Doğru cevap '+String.fromCharCode(65+q[2])+'. ')+'</b>';
+          ex.append(document.createTextNode(q[3]));ex.hidden=false;
+        });
+        o.appendChild(b);
+      });
+      box.appendChild(c);
+    });
+  }
+  function upd(){score.textContent=correct+' / '+answered+' doğru · '+Q.length+' soru'}
+  document.getElementById('reset').addEventListener('click',render);
+  render();
+})();
+</script>
+
+</body></html>
